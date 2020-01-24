@@ -1,0 +1,62 @@
+{% extends "main_template.html" %}
+
+{% load humanize %}
+
+{% block content %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static '/style.css' %}">
+<link rel="stylesheet" href="{% static '/menu/menustyle.css' %}">
+<header>
+        <div class="contenedor">
+            <div class="marca">
+                <h1><span class="resaltado">DidEatsYa!</span> Pide, espera y disfruta!</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li id="1"><a href="{% url 'inicio' %}">Inicio</a></li>
+                    <li id="2"><a href="{% url 'comidas:allfoods' %}">Comidas</a></li>
+                    <li id="3"><a href="{% url 'tiendas:allstores' %}">Tiendas</a></li>
+                    {% if user.is_authenticated %}
+                            <li style="width:12%" class="navli"><a href="#">{{ user.get_username }}</a>
+                                <ul class="child">
+                                    <li><a href= "{{ user.cuenta.get_absolute_url }}">Profile</a></li>
+                                    {% if user.is_superuser %}
+                                        <li><a href="{% url 'comidas:buscar' %}">Mantenedor Comida</a></li>
+                                        <li class="actual"><a href="{% url 'tiendas:buscar' %}">Mantenedor Tiendas</a></li>
+                                    {% endif %}
+                                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}?next={{request.path}}">Login</a>
+                        {% endif %}
+                </ul>
+            </nav>
+        </div>
+</header>
+
+<div class="container">
+    {% include 'tiendas/lateral_bar.html' %}
+    <div class="row">
+        <div class="col-lg-20">
+            <div class="card-body">
+                <h3 class="card-title">Mantenedor de Tiendas</h3>
+                <h4>Ingresar los datos</h4>
+                <p id="error"> Porfavor Corrija las casillas marcadas en rojo</p>
+                <p id="succes"> La Información se Envió correctamente, por favor verifique si E-mail.</p>
+                <div class="tab-pane fade show active" id="usr" role="tabpanel" aria-labelledby="home-tab">
+                    <form enctype="multipart/form-data" method="POST">{% csrf_token %} 
+                        
+                        {{ form.as_p }}
+                        
+                        <input type="submit" value="{{ title }}"> 
+                    </form>
+                
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+{% endblock %}|

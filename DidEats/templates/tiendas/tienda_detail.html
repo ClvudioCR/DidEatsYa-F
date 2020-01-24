@@ -1,0 +1,104 @@
+{% extends "main_template.html" %}
+
+{% load humanize %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static '/style.css' %}">
+<link rel="stylesheet" href="{% static '/menu/menustyle.css' %}">
+<header>
+        <div class="contenedor">
+            <div class="marca">
+                <h1><span class="resaltado">DidEatsYa!</span> Pide, espera y disfruta!</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li id="1"><a href="{% url 'inicio' %}">Inicio</a></li>
+                    <li id="2"><a href="{% url 'comidas:allfoods' %}">Comidas</a></li>
+                    <li id="3" class="actual"><a href="{% url 'tiendas:allstores' %}">Tiendas</a></li>
+                    {% if user.is_authenticated %}
+                            <li style="width:12%" class="navli"><a href="#">{{ user.get_username }}</a>
+                                <ul class="child">
+                                    <li><a href= "{{ user.cuenta.get_absolute_url }}">Profile</a></li>
+                                    {% if user.is_superuser %}
+                                        <li><a href="{% url 'comidas:buscar' %}">Mantenedor Comida</a></li>
+                                        <li><a href="{% url 'tiendas:buscar' %}">Mantenedor Tiendas</a></li>
+                                    {% endif %}
+                                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}?next={{request.path}}">Login</a>
+                        {% endif %}
+                </ul>
+            </nav>
+        </div>
+</header>
+<div class="container">
+    <!--MAIN-->
+    <div class="col-lg-12">
+
+        <!--CARRUSEL-->
+        <div class="card mt-4">
+            <div id="demo" class="carousel slide" data-ride="carousel">
+
+                <!-- Indicators -->
+                <ul class="carousel-indicators">
+                    <li data-target="#demo" data-slide-to="0" class="active"></li>
+                </ul>
+        
+                <!-- The slideshow -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{{ object.tienda_imagen.url }}" alt="Imagen Principal" style="width:1000px;height: 570px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--TEXTO DE PROD-->
+        <div class="card-body">
+            <h3 class="card-title">{{ object.tienda_nombre }}</h3>
+            <h4>{{ object.tienda_direccion}}</h4>
+            <h5>{{ object.tienda_comuna}}</h5>
+            </div>
+            <ul class="nav nav-pills" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#descr" role="tab" aria-controls="descr" aria-selected="true">Descripción</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#rev" role="tab" aria-controls="rev" aria-selected="false">Reseñas</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="descr" role="tabpanel" aria-labelledby="home-tab">
+                    <p class="card-text">
+                        <br>
+                        {{ object.tienda_descripcion }}
+                    </p>
+                </div>
+                <div class="tab-pane fade" id="rev" role="tabpanel" aria-labelledby="contact-tab">
+                    <div class="card card-outline-secondary my-4">
+                        <div class="card-header">
+                            Reseñas del producto
+                        </div>
+                        <div class="card-body">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+                            <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+                            <hr>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+                            <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+                            <hr>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+                            <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+                            <hr>
+                            <a href="#" class="btn btn-success">Deja tu reseña</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+    </div>
+</div>
+{% endblock %}

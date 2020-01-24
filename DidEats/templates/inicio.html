@@ -1,0 +1,82 @@
+{% extends "main_template.html" %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static '/style.css' %}">
+<header>
+		<div class="contenedor">
+			<div class="marca">
+				<h1><span class="resaltado">DidEatsYa!</span> Pide, espera y disfruta!</h1>
+			</div>
+			<nav>
+				<ul>
+					<li id="1" class="actual"><a href="{% url 'inicio' %}">Inicio</a></li>
+					<li id="2"><a href="{% url 'comidas:allfoods' %}">Comidas</a></li>
+					<li id="3"><a href="{% url 'tiendas:allstores' %}">Tiendas</a></li>
+					{% if user.is_authenticated %}
+                            <li style="width:12%" class="navli"><a href="#">{{ user.get_username }}</a>
+                                <ul class="child">
+                                    <li><a href= "{{ user.cuenta.get_absolute_url }}">Profile</a></li>
+                                    {% if user.is_superuser %}
+                                        <li><a href="{% url 'comidas:buscar' %}">Mantenedor Comida</a></li>
+                                        <li><a href="{% url 'tiendas:buscar' %}">Mantenedor Tiendas</a></li>
+                                    {% endif %}
+                                    <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}?next={{request.path}}">Login</a>
+                        {% endif %}
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<br>
+
+<!--- Carouse --->
+<div class="container">
+	<div class="col-md-12">
+		<div id=demo class="carousel slide" data-ride="carousel">
+			<ul class="carousel-indicators">
+				<li data-target="#demo" data-slide-to="0" class="active"></li>
+				<li data-target="#demo" data-slide-to="1"></li>
+				<li data-target="#demo" data-slide-to="2"></li>
+			</ul>
+			<!-- Contenido de Slides -->
+			<div class="carousel-inner">
+				<div class="carousel-item active">
+					<img src="{% static 'img/1.jpg' %}" alt="Imagen 1">
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Pide</h5>
+						<p>Pide entre nuestro gran catalogo de diferentes y deliciosas comidas.</p>
+					</div>
+				</div>
+				<div class="carousel-item">
+					<img src="{% static 'img/2.jpg' %}" alt="Imagen 2">
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Espera</h5>
+						<p>Espera por tu delicioso pedido, estara en tu mesa en lo que te da hambre.</p>
+					</div>
+				</div>
+				<div class="carousel-item">
+					<img src="{% static 'img/3.jpg' %}" alt="Imagen 3">
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Disfruta!</h5>
+						<p>Disfruta por tu deliciosa comida, lista en la comodidad de tu mesa.</p>
+					</div>
+				</div>
+			</div>
+			<!-- Botones para desplazarse-->
+			<div id="botones" style="font-size: 60; color: red">
+				<a class="carousel-control-prev" href="#demo" data-slide="prev">
+					<span class="carousel-control-prev-icon"></span>
+				</a>
+				<a class="carousel-control-next" href="#demo" data-slide="next">
+					<span class="carousel-control-next-icon"></span>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

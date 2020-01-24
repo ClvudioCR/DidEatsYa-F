@@ -1,0 +1,83 @@
+{% extends "main_template.html" %}
+
+{% load humanize %}
+
+{% block content %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static '/style.css' %}">
+<link rel="stylesheet" href="{% static '/menu/menustyle.css' %}">
+<header>
+        <div class="contenedor">
+            <div class="marca">
+                <h1><span class="resaltado">DidEatsYa!</span> Pide, espera y disfruta!</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li id="1"><a href="{% url 'inicio' %}">Inicio</a></li>
+                    <li id="2"><a href="{% url 'comidas:allfoods' %}">Comidas</a></li>
+                    <li id="3"><a href="{% url 'tiendas:allstores' %}">Tiendas</a></li>
+                    {% if user.is_authenticated %}
+                            <li style="width:12%" class="navli"><a href="#">{{ user.get_username }}</a>
+                                <ul class="child">
+                                    <li><a href= "{{ user.cuenta.get_absolute_url }}">Profile</a></li>
+                                    {% if user.is_superuser %}
+                                        <li><a href="{% url 'comidas:buscar' %}">Mantenedor Comida</a></li>
+                                        <li class="actual"><a href="{% url 'tiendas:buscar' %}">Mantenedor Tiendas</a></li>
+                                    {% endif %}
+                                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}?next={{request.path}}">Login</a>
+                        {% endif %}
+                </ul>
+            </nav>
+        </div>
+</header>
+<div class="container">
+  {% include 'comidas/lateral_bar.html' %}
+  <div class="row">
+    <div class="col">
+      <div class="card-body">
+          <h3 class="card-title">Mantenedor de Tiendas</h3>
+          <form method="GET" action="">
+              <input type="text" name="q" placeholder="Introduzca la Id de la tienda" >
+              <input type="submit" name="Serch" value = "{{ title }}">
+
+          </form>
+
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Id</th>
+          <th>Nombre</th>
+          <th>Direccion</th>
+          <th>Opciones</th>
+        </tr>
+        </thead>
+        
+        <tbody>
+          
+          {% for object in object_list %}
+          <tr>
+            <th scope="row">{{ object.tienda_id }}</th>
+            <td>{{ object.tienda_nombre }}</td>
+            <td>{{ object.tienda_direccion }}</td>
+            <td>
+              <a href="{{ object.get_absolute_url }}" class="btn btn-secondary" >Mostrar</a>
+              <a href="{% url 'tiendas:editar' pk=object.tienda_id %}" class="btn btn-secondary" >Editar</a>
+              <a href="{% url 'tiendas:eliminar' pk=object.tienda_id %}" class="btn btn-secondary" >Eliminar</a>
+            </td>
+          </tr>
+
+          {% endfor %}
+          
+        </tbody>
+      </table>
+    </div> 
+  </div>
+</div>
+{% endblock %}
